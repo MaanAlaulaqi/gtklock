@@ -8,6 +8,12 @@
         <property name="valign">start</property>
         <property name="orientation">vertical</property>
         <property name="spacing">10</property>
+        <!-- need to supress the 'Gtk-CRITICAL' error spam (it's trying to call these guys:) -->
+        <object class="GtkLabel" id="clock-label"/>
+        <object class="GtkLabel" id="date-label"/>
+        <object class="GtkLabel" id="warning-label"/>
+        <object class="GtkLabel" id="error-label"/>
+
 
         <!-- ASCII Banner Placeholder -->
         <child>

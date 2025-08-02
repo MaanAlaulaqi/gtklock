@@ -367,6 +367,32 @@ struct Window *create_window(GdkMonitor *monitor) {
 
 	if(gtklock->hidden) window_idle_hide(w);
 	module_on_window_create(gtklock, w);
+
+/* === Load user config'd CSS =========================================== */
+{
+    /* ~/.config/gtklock/style.css */
+    char *css_path = g_build_filename (g_get_user_config_dir (),
+                                       "gtklock", "style.css",
+                                       NULL);
+
+    if (g_file_test (css_path, G_FILE_TEST_EXISTS)) {
+        GtkCssProvider *prov = gtk_css_provider_new ();
+        gtk_css_provider_load_from_path (prov, css_path, NULL);
+
+        /* USER priority beats every system / theme rule */
+        gtk_style_context_add_provider_for_screen
+          (gdk_screen_get_default (),
+           GTK_STYLE_PROVIDER (prov),
+           GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+        /* keep provider alive for lifetime of the process */
+        g_object_unref (prov);
+    }
+    g_free (css_path);
+}
+/* ====================================================================== */
+
+
 	gtk_widget_show_all(w->window);
 
 	g_object_unref(builder);
